@@ -1,0 +1,19 @@
+version: 2.0
+jobs:
+  build:
+    docker:
+      - image: circleci/openjdk:8-node-browsers
+    steps:
+      - checkout
+      - run:
+          sudo apt-get install build-essential
+      - run:
+          name: install-packages
+          command: npm install
+      - run:
+          name: start-selenium
+          command: npm run selenium
+          background: true
+      - run:
+          name: start-tests
+          command: npm run login_signUp
