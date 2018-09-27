@@ -3,6 +3,7 @@ import Page from './page'
 class DashboardPage extends Page {
   get breadcrumb () { return browser.element('.ant-breadcrumb-link span') }
 
+
   // LEFT MENU
   get leftMenu () { return browser.element('.ant-menu') }
   get merchantsUsersMenu () { return browser.element('[aria-owns="merchantsUsers$Menu"]') }
