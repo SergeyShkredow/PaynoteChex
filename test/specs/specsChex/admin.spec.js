@@ -59,7 +59,7 @@ describe('Admin', () => {
     DashboardPage.merchantsMenu.waitForEnabled()
     browser.pause(200)
     DashboardPage.merchantsMenu.click()
-    rowser.pause(1000)
+    browser.pause(1000)
     browser.refresh()
     MerchantsPage.ghostButtonOfFirstMerchant.waitForVisible()
     MerchantsPage.ghostButtonOfFirstMerchant.click()
@@ -84,7 +84,7 @@ describe('Admin', () => {
 
   it('im an admin and i ghost into a office user account', function () {
     this.retries(1)
-    LoginPage.login()а
+    LoginPage.login()
     DashboardPage.leftMenu.waitForText()
     DashboardPage.officesUsersMenu.click()
     DashboardPage.officeUsersMenu.waitForVisible()

@@ -1,52 +1,74 @@
+import { USER_ADMIN_LOGIN, USER_EMAIL_PASSWORD } from '../../../constants/index'
+import { ERROR_INVALID_EMAIL_OR_PASS } from '../../../constants/listErrors'
+import { assert } from 'chai'
 import Page from './page'
-import DashboardPage from './dashboard.page'
-import { USER_EMAIL_ADMIN, USER_EMAIL_PASS } from '../../../constants'
 
 class LoginPage extends Page {
-  get header () { return browser.element('span=Login') }
-  get email () { return browser.element('#email') }
-  get password () { return browser.element('#password') }
+  get header () { return browser.element('.auth-header') }
+  get email () { return browser.element('input[name="username"]') }
+  get password () { return browser.element('input[name="password"]') }
   get loginButton () { return browser.element('button') }
+  get submit () { return browser.element('button=Submit') }
+  get resend () { return browser.element('button=Resend Code') }
+  get codeAuth () { return browser.element('input[name="pinCode"]') }
   get errorMessage () { return browser.element('div[type=error] p') }
-  get formVerification () { return browser.element('span=Please enter Access Verification Code') }
-
-  get buttonSeamplessMerchants () { return browser.element('span=Seamless') }
-  get buttonLogOutMerchants () { return browser.element('button=Sign Out') }
-  get modalMerchants () { return browser.element('.ant-modal-content') }
-  get buttonModalLogOutYesMerchants () { return browser.element('button=Yes') }
+  get formAuthentication () { return browser.element('h4=Multi-factor Authentication') }
+  get textAuthentication () { return browser.element('.alert-info') }
 
   open () {
     super.open('login')
     this.header.waitForText()
   }
 
-  submit () {
+  loginBtn () {
     this.loginButton.click()
   }
 
-  login ({ email = USER_EMAIL_ADMIN, password = USER_EMAIL_PASS} = {}) {
+  subminBtn () {
+    this.submit.click()
+  }
+
+  login ({ email = USER_ADMIN_LOGIN, password = USER_EMAIL_PASSWORD } = {}) {
     this.open()
+    this.email.waitForVisible()
     this.email.setValue(email)
-    this.password.setValue(password)
-    this.submit()
-    DashboardPage.leftMenu.waitForText()
     browser.pause(1000)
-  }
-
-  loginOfficeUser ({ email = 'test11@test.com', password = '123456!'} = {}) {
-    this.open()
-    this.email.setValue(email)
     this.password.setValue(password)
-    this.submit()
+    browser.pause(1000)
+    this.loginBtn()
+    this.formAuthentication.waitForVisible()
+    let code = browser.getText('.alert-info').slice(-5, -1)
+    this.codeAuth.setValue(code)
+    this.subminBtn()
   }
 
-  logOut () {
-    this.buttonSeamplessMerchants.click()
-    this.buttonLogOutMerchants.waitForVisible()
-    this.buttonLogOutMerchants.click()
-    this.modalMerchants.waitForVisible()
-    this.buttonModalLogOutYesMerchants.click()
+  loginWithResend ({ email = USER_ADMIN_LOGIN, password = USER_EMAIL_PASSWORD } = {}) {
+    this.open()
+    this.email.waitForVisible()
+    this.email.setValue(email)
+    browser.pause(1000)
+    this.password.setValue(password)
+    browser.pause(1000)
+    this.loginBtn()
+    this.textAuthentication.waitForVisible()
+    this.resend.click()
+    this.textAuthentication.waitForVisible()
+    let code = browser.getText('.alert-info').slice(-5, -1)
+    this.codeAuth.setValue(code)
+    this.subminBtn()
+  }
+  invalidPass ( { email = USER_ADMIN_LOGIN, error = ERROR_INVALID_EMAIL_OR_PASS } = {}) {
+    this.open()
+    this.email.waitForVisible()
+    this.email.setValue(email)
+    browser.pause(1000)
+    this.password.setValue('testErrorPassword')
+    browser.pause(1000)
+    this.loginBtn()
+    let errorName = browser.getText('.alert-danger')[0]
+      console.log(errorName)
+      // browser.debug()
+    // assert.equal(error, errorName)
   }
 }
-
 export default new LoginPage()

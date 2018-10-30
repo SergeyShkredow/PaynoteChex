@@ -1,17 +1,11 @@
 // admin
-export const USER_ADMIN_LOGIN = 'admin_ae141086@mail.ru'
-export const USER_PHONE = '1122334455'
+export const USER_ADMIN_LOGIN = 'paynotetests@gmail.com'
 
 // email
 export const USER_EMAIL_PASSWORD = 'Qwerty22'
 
-// ach tran types
-export const TRANTYPE_SAVINGS = 'Savings'
-export const TRANTYPE_CHECKING = 'Checking'
-export const SEC_CODE_TEL = 'TEL'
-export const SEC_CODE_CCD = 'CCD'
-
-export const SALIDO_API_KEY = 'c2tfMDFCV1JBSE1HN0hKM0JRUENGRkUwREgyUzg='
+// phone
+export const USER_PHONE = '1122334455'
 
 export default {
   USER_PHONE,

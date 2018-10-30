@@ -19,21 +19,8 @@ class DashboardPage extends Page {
   get settingsMenu () { return browser.element('span=Settings') }
   get blockListMenu () { return browser.element('a[href="/settings"]') }
 
-  // dashboard content
-  get dashboardContent () { return browser.element('.ant-row') }
-
-  // search field
-  get searchField () { return browser.element('.ant-input') }
-
-  // check user email
-  get checkForEmail () { return browser.element('.ag-cell[col-id="email"]') }
-
-  // link header
-  get adminBtn () { return browser.element('a=Admin Panel') }
-  get headerEmail () { return browser.element('//div/p[text()="test11@test.com"]') }
-
   open () {
-    super.open('https://paynote.seamlesschex.com/')
+    super.open('https://dev-paynote.seamlesschex.com/merchants')
     browser.pause(300)
   }
 }

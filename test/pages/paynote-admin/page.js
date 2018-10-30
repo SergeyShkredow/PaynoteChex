@@ -1,6 +1,6 @@
 export default class Page {
   open (path = '') {
-    browser.url(`https://paynote.seamlesschex.com/${path}`)
+    browser.url(`https://dev-paynote.seamlesschex.com/${path}`)
   }
 
   isVisible (el) {

@@ -34,7 +34,7 @@ class DashboardPage extends Page {
   get headerEmail () { return browser.element('//div/p[text()="test11@test.com"]') }
 
   open () {
-    super.open('https://rc-admin.seamlesspay.com/')
+    super.open('https://paynote.seamlesschex.com/')
     browser.pause(300)
   }
 }

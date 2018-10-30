@@ -137,7 +137,7 @@ exports.config = {
   // Jasmine: `$ npm install jasmine`
   // Cucumber: `$ npm install cucumber`
   framework: 'mocha',
-  baseUrl: 'https://paynote.seamlesschex.com/',
+  baseUrl: 'https://dev-paynote.seamlesschex.com/',
   // baseUrl: 'https://exist.ua/',
   //
   // Test reporter for stdout.
