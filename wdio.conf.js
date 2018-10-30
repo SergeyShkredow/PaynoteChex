@@ -9,9 +9,9 @@ exports.config = {
   // according to your user and key information. However if you are using a private Selenium
   // backend you should define the host address, port, and path here.
   //
-  //host: 'localhost',
-  //port: 4444,
-  //path: '/wd/hub',
+  // host: 'localhost',
+  // port: 4444,
+  // path: '/wd/hub',
   //
   // =================
   // Service Providers
@@ -40,23 +40,8 @@ exports.config = {
     './test/specs/**/*.spec.js'
   ],
   suites: {
-    login: [
-      './test/specs/login.spec.js'
-    ],
-    vTerminal: [
-      './test/specs/vTerminal.spec.js'
-    ],
-    common: [
-      './test/specs/common.spec.js'
-    ],
-    mail: [
-      './test/specs/mail.spec.js'
-    ],
     admin: [
-      './test/specs/admin.spec.js'
-    ],
-    admin_mail: [
-        './test/specs/admin-mail.spec.js'
+      './test/specs/paynote-admin.spec.js'
     ]
   },
   // Patterns to exclude.
@@ -82,7 +67,7 @@ exports.config = {
       // browserName: 'chrome',
       browserName: 'firefox',
       maxInstances: '10'
-    },
+    }
     //     ,
     // {
     //     browserName: 'firefox'
@@ -132,14 +117,14 @@ exports.config = {
   // Browserevent: https://github.com/webdriverio/browsereventhttps://www.google.com.ua/
   // plugins: {
   //   'wdio-webcomponents': {}
-      // webdrivercss: {
-      //     screenshotRoot: 'my-shots',
-      //     failedComparisonsRoot: 'diffs',
-      //     misMatchTolerance: 0.05,
-      //     screenWidth: [320,480,640,1024]
-      // },
-      // webdriverrtc: {},
-      // browserevent: {}
+  // webdrivercss: {
+  //     screenshotRoot: 'my-shots',
+  //     failedComparisonsRoot: 'diffs',
+  //     misMatchTolerance: 0.05,
+  //     screenWidth: [320,480,640,1024]
+  // },
+  // webdriverrtc: {},
+  // browserevent: {}
   // },
   //
   // Framework you want to run your specs with.
@@ -152,7 +137,7 @@ exports.config = {
   // Jasmine: `$ npm install jasmine`
   // Cucumber: `$ npm install cucumber`
   framework: 'mocha',
-  baseUrl: 'https://rc-portal.seamlesspay.com/',
+  baseUrl: 'https://paynote.seamlesschex.com/',
   // baseUrl: 'https://exist.ua/',
   //
   // Test reporter for stdout.
@@ -162,11 +147,11 @@ exports.config = {
   //
   // Some reporter require additional information which should get defined here
   reporterOptions: {
-      htmlFormat: {
-          outputDir: './reports/'
-      },
+    htmlFormat: {
+      outputDir: './reports/'
+    },
     //
-    // If you are using the "xunit" reporter you should define the directory where
+    // If you are using the "unit" reporter you should define the directory where
     // WebdriverIO should save all unit reports.
     outputDir: './'
   },
@@ -214,23 +199,23 @@ exports.config = {
   // will wait until that promise got resolved to continue.
   //
   // Gets executed before all workers get launched.
-  onPrepare: function () {
-    console.log('let\'s go');
+  onPrepare () {
+    console.log('let\'s go')
   },
   //
   // Gets executed before test execution begins. At this point you will have access to all global
   // variables like `browser`. It is the perfect place to define custom commands.
-  before: function () {
+  before () {
   },
   //
   // Gets executed after all tests are done. You still have access to all global variables from
   // the test.
-  after: function (failures, pid) {
+  after (failures, pid) {
   },
   //
   // Gets executed after all workers got shut down and the process is about to exit. It is not
   // possible to defer the end of the process using a promise.
-  onComplete: function () {
-    console.log('that\'s it');
+  onComplete () {
+    console.log('that\'s it')
   }
-};
+}

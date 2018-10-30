@@ -8,12 +8,7 @@
     "postinstall": "node_modules/.bin/selenium-standalone install",
     "selenium": "node_modules/.bin/selenium-standalone start",
     "test": "wdio wdio.conf.js",
-    "common": "yarn run test -- --suite common",
-    "vTerminal": "yarn run test -- --suite vTerminal",
     "admin": "yarn run test -- --suite admin",
-    "login_signUp": "yarn run test -- --suite login",
-    "mail": "yarn run test -- --suite mail",
-    "admin-mail": "yarn run test -- --suite admin_mail",
     "lint": "eslint test/**/*.js",
     "lint-staged": "lint-staged",
     "lint:fix": "eslint --fix test/. "

@@ -1,4 +1,9 @@
+### PAYNOTE CHEX
+
 # JS-Mocha-WebdriverIO-Selenium
+
+### INSTALL
+yarn install
 
 ### START SELENIUM
 yarn selenium

@@ -1,9 +1,9 @@
 import { expect } from 'chai'
-import { reloadGiftCard } from '../../utils'
-import LoginPage from '../pages/portal/login.page'
-import DashboardPage from '../pages/portal/dashboard.page'
-import GiftCardPage from '../pages/portal/vTerminal-gift-card.page'
-import { TCC_GIFT_CARD, SVS_GIFT_CARD, SVS_GIFT_CARD_NOT_ACTIVE, TCC_GIFT_CARD_NOT_ACTIVE } from '../../constants'
+import { reloadGiftCard } from '../../../utils/index'
+import LoginPage from '../../pages/portal/login.page'
+import DashboardPage from '../../pages/portal/dashboard.page'
+import GiftCardPage from '../../pages/portal/vTerminal-gift-card.page'
+import { TCC_GIFT_CARD, SVS_GIFT_CARD, SVS_GIFT_CARD_NOT_ACTIVE, TCC_GIFT_CARD_NOT_ACTIVE } from '../../../constants/index'
 
 describe('Gift Card Transaction ', () => {
   before(() => {

@@ -1,9 +1,9 @@
 import { expect } from 'chai'
-import { createTestEmail } from '../../utils'
-import LoginPage from '../pages/portal/login.page'
-import DashboardPage from '../pages/portal/dashboard.page'
-import SignUp from '../pages/portal/sign-up.page'
-import { USER_EMAIL_PORTAL, USER_PASS } from '../../constants'
+import { createTestEmail } from '../../../utils/index'
+import LoginPage from '../../pages/portal/login.page'
+import DashboardPage from '../../pages/portal/dashboard.page'
+import SignUp from '../../pages/portal/sign-up.page'
+import { USER_EMAIL_PORTAL, USER_PASS } from '../../../constants/index'
 
 describe('Sign in/Sign up ', () => {
   afterEach(() => {

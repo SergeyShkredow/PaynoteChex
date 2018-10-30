@@ -1,12 +1,12 @@
 import { expect } from 'chai'
-import { reloadGiftCard } from '../../utils'
-import LoginPage from '../pages/portal/login.page'
-import DashboardPage from '../pages/portal/dashboard.page'
-import GiftCardPage from '../pages/portal/vTerminal-gift-card.page'
-import ChargePage from '../pages/portal/vTerminal-credit.page'
-import AchPage from '../pages/portal/vTerminal-ach.page'
-import { TCC_GIFT_CARD, SVS_GIFT_CARD, SVS_GIFT_CARD_NOT_ACTIVE, TCC_GIFT_CARD_NOT_ACTIVE, PSP_CARD_INVALID } from '../../constants'
-const credstash = require('../../utils/credstash')
+import { reloadGiftCard } from '../../../utils/index'
+import LoginPage from '../../pages/portal/login.page'
+import DashboardPage from '../../pages/portal/dashboard.page'
+import GiftCardPage from '../../pages/portal/vTerminal-gift-card.page'
+import ChargePage from '../../pages/portal/vTerminal-credit.page'
+import AchPage from '../../pages/portal/vTerminal-ach.page'
+import { TCC_GIFT_CARD, SVS_GIFT_CARD, SVS_GIFT_CARD_NOT_ACTIVE, TCC_GIFT_CARD_NOT_ACTIVE, PSP_CARD_INVALID } from '../../../constants/index'
+const credstash = require('../../../utils/credstash')
 
 const tranData = JSON.parse(credstash.auto_test_data)
 

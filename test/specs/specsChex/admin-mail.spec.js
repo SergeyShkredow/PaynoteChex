@@ -1,9 +1,9 @@
 import { expect } from 'chai'
-import { verifyExportEmail } from '../../utils/mail'
-import LoginPage from '../pages/admin/login.page'
-import DashboardPage from '../pages/admin/dashboard.page'
-import Page from '../pages/admin/page'
-import ExportEmailModalPage from "../pages/admin/modals.page";
+import { verifyExportEmail } from '../../../utils/mail'
+import LoginPage from '../../pages/admin/login.page'
+import DashboardPage from '../../pages/admin/dashboard.page'
+import Page from '../../pages/admin/page'
+import ExportEmailModalPage from "../../pages/admin/modals.page";
 const page = new Page()
 
 describe('Email tests(agent, merchant, office users, merchants, merchant users) ', () => {

@@ -1,280 +1,279 @@
-import { expect } from 'chai'
-import { assert } from 'chai'
-import { waitFilter, selectFilterDate, scrollToElement, waitForHidden } from '../../utils/index'
-import Page from '../pages/admin/page'
-import LoginPage from '../pages/admin/login.page'
-import LoginPagePortal from '../pages/portal/login.page'
-import DashboardPage from '../pages/admin/dashboard.page'
-import MerchantsPage from '../pages/admin/merchants.page'
-import MerchantUsersPage from '../pages/admin/merchant-users.page'
-import OfficesPage from '../pages/admin/offices.page'
-import OfficeUsersPage from '../pages/admin/office-users.page'
-import OfficeTreePage from '../pages/admin/officesTree.page'
-import TicketsAgentsPage from '../pages/admin/tickets-agents.page'
-import TicketsMerchantsPage from '../pages/admin/tickets-merchants.page'
-import RiskRetrievalsPage from '../pages/admin/retrievals.page'
-import RiskDisputesPage from '../pages/admin/disputes.page'
-import MerchantDetailsPage from '../pages/admin/merchant-details.page'
-import CreateTicketPage from '../pages/admin/create-ticket.page'
-import CreateAgentsTicketPage from '../pages/admin/create-agents-ticket.page'
-import DepartmentsPage from '../pages/admin/departments.page'
-import SearchPage from '../pages/admin/search.page'
-import SettingsTicketsPage from '../pages/admin/settings-tickets.page'
-import { USER_EMAIL_ADMIN, USER_EMAIL_PORTAL, USER_PASS, USER_EMAIL_PASS } from '../../constants'
+import { expect, assert } from 'chai'
+import { waitFilter, selectFilterDate, scrollToElement, waitForHidden } from '../../../utils/index'
+import Page from '../../pages/admin/page'
+import LoginPage from '../../pages/admin/login.page'
+import LoginPagePortal from '../../pages/portal/login.page'
+import DashboardPage from '../../pages/admin/dashboard.page'
+import MerchantsPage from '../../pages/admin/merchants.page'
+import MerchantUsersPage from '../../pages/admin/merchant-users.page'
+import OfficesPage from '../../pages/admin/offices.page'
+import OfficeUsersPage from '../../pages/admin/office-users.page'
+import OfficeTreePage from '../../pages/admin/officesTree.page'
+import TicketsAgentsPage from '../../pages/admin/tickets-agents.page'
+import TicketsMerchantsPage from '../../pages/admin/tickets-merchants.page'
+import RiskRetrievalsPage from '../../pages/admin/retrievals.page'
+import RiskDisputesPage from '../../pages/admin/disputes.page'
+import MerchantDetailsPage from '../../pages/admin/merchant-details.page'
+import CreateTicketPage from '../../pages/admin/create-ticket.page'
+import CreateAgentsTicketPage from '../../pages/admin/create-agents-ticket.page'
+import DepartmentsPage from '../../pages/admin/departments.page'
+import SearchPage from '../../pages/admin/search.page'
+import SettingsTicketsPage from '../../pages/admin/settings-tickets.page'
+import { USER_EMAIL_ADMIN, USER_EMAIL_PORTAL, USER_PASS, USER_EMAIL_PASS } from '../../../constants/index'
 
 const page = new Page()
 
-  describe('Admin', () => {
-    before(() => {
-      browser.windowHandleFullscreen()
+describe('Admin', () => {
+  before(() => {
+    browser.windowHandleFullscreen()
+  })
+
+  afterEach(() => {
+    browser.localStorage('DELETE')
+  })
+
+  it('success login', () => {
+    LoginPage.open()
+    LoginPage.email.waitForVisible()
+    LoginPage.email.setValue(USER_EMAIL_ADMIN)
+    LoginPage.password.setValue(USER_EMAIL_PASS)
+    LoginPage.submit()
+    DashboardPage.leftMenu.waitForText()
+    expect(DashboardPage.breadcrumb.getText()).to.contain('Dashboard')
+  })
+
+  it('fail login to admin with merchant user', () => {
+    LoginPage.open()
+    LoginPage.email.waitForVisible()
+    LoginPage.email.setValue(USER_EMAIL_PORTAL)
+    LoginPage.password.setValue(USER_PASS)
+    LoginPage.submit()
+    LoginPage.errorMessage.waitForText()
+    expect(LoginPage.errorMessage.getText()).to.contain('This account is for portal users.')
+  })
+
+  it('im an admin and i ghost into a merchant account', () => {
+    LoginPage.login()
+    DashboardPage.leftMenu.waitForText()
+    DashboardPage.merchantsUsersMenu.click()
+    DashboardPage.merchantsMenu.waitForEnabled()
+    browser.pause(200)
+    DashboardPage.merchantsMenu.click()
+    rowser.pause(1000)
+    browser.refresh()
+    MerchantsPage.ghostButtonOfFirstMerchant.waitForVisible()
+    MerchantsPage.ghostButtonOfFirstMerchant.click()
+    browser.waitForVisible('span=Admin Panel')
+    expect(browser.getUrl()).to.be.equal('https://rc-portal.seamlesspay.com/')
+  })
+
+  it('im an admin and i ghost into a merchant user account', () => {
+    LoginPage.login()
+    DashboardPage.leftMenu.waitForText()
+    DashboardPage.merchantsUsersMenu.click()
+    DashboardPage.merchantUsersMenuList.waitForVisible()
+    browser.pause(200)
+    DashboardPage.merchantUsersMenuList.click()
+    browser.pause(1000)
+    browser.refresh()
+    MerchantUsersPage.ghostButtonOfFirstMerchantUser.waitForVisible()
+    MerchantUsersPage.ghostButtonOfFirstMerchantUser.click()
+    browser.waitForVisible('span=Admin Panel')
+    expect(browser.getUrl()).to.be.equal('https://rc-portal.seamlesspay.com/')
+  })
+
+  it('im an admin and i ghost into a office user account', function () {
+    this.retries(1)
+    LoginPage.login()а
+    DashboardPage.leftMenu.waitForText()
+    DashboardPage.officesUsersMenu.click()
+    DashboardPage.officeUsersMenu.waitForVisible()
+    browser.pause(200)
+    DashboardPage.officeUsersMenu.click()
+    browser.refresh()
+    OfficeUsersPage.ghostButtonOfFirstOfficeUser.waitForVisible()
+    OfficeUsersPage.ghostButtonOfFirstOfficeUser.click()
+    browser.waitForVisible('span=Admin Panel')
+    expect(browser.getUrl()).to.be.equal('https://rc-admin.seamlesspay.com/')
+  })
+
+  it('verify TCC ans SVS configurations', () => {
+    LoginPage.login()
+    // TCC configurations
+    page.open('merchants/32469466')
+    browser.pause(3000)
+    MerchantDetailsPage.featuresTab.waitForEnabled()
+    MerchantDetailsPage.featuresTab.click()
+    MerchantDetailsPage.header.waitForVisible()
+    const tccConfig = browser.getText(MerchantDetailsPage.tccConfigurations.selector)
+    expect(tccConfig.length).to.be.equal(7)
+    // console.log(tccConfig);
+    tccConfig.forEach((val) => {
+      expect(val).to.not.equal('')
     })
 
-    afterEach(() => {
-      browser.localStorage('DELETE')
+    // SVS configurations
+    page.open('merchants/470752536903370')
+    browser.pause(3000)
+    MerchantDetailsPage.featuresTab.waitForEnabled()
+    MerchantDetailsPage.featuresTab.click()
+    MerchantDetailsPage.header.waitForVisible()
+    const svsConfig = browser.getText(MerchantDetailsPage.svsConfigurations.selector).slice(0, 8)
+    svsConfig.forEach((val) => {
+      expect(val).to.not.equal('')
     })
+  })
 
-    it('success login', () => {
-      LoginPage.open()
-      LoginPage.email.waitForVisible()
-      LoginPage.email.setValue(USER_EMAIL_ADMIN)
-      LoginPage.password.setValue(USER_EMAIL_PASS)
-      LoginPage.submit()
-      DashboardPage.leftMenu.waitForText()
-      expect(DashboardPage.breadcrumb.getText()).to.contain('Dashboard')
-    })
+  it('search field for dashboard merchants', function () {
+    this.retries(1)
+    LoginPage.login()
+    DashboardPage.searchField.waitForVisible()
+    DashboardPage.dashboardContent.waitForVisible()
+    DashboardPage.searchField.setValue('470752536903867')
+    page.open('search/470752536903867')
+    MerchantsPage.contentMerchants.waitForVisible()
+    const searchResultMerchant = browser.getText(MerchantsPage.searchContentListMerchants.selector)
+    expect(searchResultMerchant).to.deep.include('470752536903867')
+  })
 
-    it('fail login to admin with merchant user', () => {
-      LoginPage.open()
-      LoginPage.email.waitForVisible()
-      LoginPage.email.setValue(USER_EMAIL_PORTAL)
-      LoginPage.password.setValue(USER_PASS)
-      LoginPage.submit()
-      LoginPage.errorMessage.waitForText()
-      expect(LoginPage.errorMessage.getText()).to.contain('This account is for portal users.')
-    })
+  it('search field for Email Merchant Users', function () {
+    this.retries(1)
+    LoginPage.login()
+    DashboardPage.searchField.waitForVisible()
+    DashboardPage.dashboardContent.waitForVisible()
+    DashboardPage.searchField.setValue('alexa-user@ew.com')
+    page.open('search/alexa-user@ew.com')
+    MerchantUsersPage.contentMerchantUser.waitForVisible()
+    const searchResultEmail = browser.getText(MerchantUsersPage.searchListEmailMerchantUser.selector)
+    expect(searchResultEmail).to.deep.include('alexa-user@ew.com')
+  })
 
-    it('im an admin and i ghost into a merchant account', () => {
-      LoginPage.login()
-      DashboardPage.leftMenu.waitForText()
-      DashboardPage.merchantsUsersMenu.click()
-      DashboardPage.merchantsMenu.waitForEnabled()
-      browser.pause(200)
-      DashboardPage.merchantsMenu.click()
-      browser.pause(1000)
-      browser.refresh()
-      MerchantsPage.ghostButtonOfFirstMerchant.waitForVisible()
-      MerchantsPage.ghostButtonOfFirstMerchant.click()
-      browser.waitForVisible('span=Admin Panel')
-      expect(browser.getUrl()).to.be.equal('https://rc-portal.seamlesspay.com/')
-    })
+  it('search field for email Offices', () => {
+    LoginPage.login()
+    DashboardPage.leftMenu.waitForText()
+    DashboardPage.officesUsersMenu.click()
+    browser.pause(1000)
+    DashboardPage.officesMenu.click()
+    browser.refresh()
+    OfficesPage.searchOffices.waitForVisible()
+    OfficesPage.searchOffices.setValue('Seamless')
+    waitFilter(OfficesPage.searchName.selector)
+    expect(OfficesPage.searchName.getText()).to.equal('Seamless')
+  })
 
-    it('im an admin and i ghost into a merchant user account', () => {
-      LoginPage.login()
-      DashboardPage.leftMenu.waitForText()
-      DashboardPage.merchantsUsersMenu.click()
-      DashboardPage.merchantUsersMenuList.waitForVisible()
-      browser.pause(200)
-      DashboardPage.merchantUsersMenuList.click()
-      browser.pause(1000)
-      browser.refresh()
-      MerchantUsersPage.ghostButtonOfFirstMerchantUser.waitForVisible()
-      MerchantUsersPage.ghostButtonOfFirstMerchantUser.click()
-      browser.waitForVisible('span=Admin Panel')
-      expect(browser.getUrl()).to.be.equal('https://rc-portal.seamlesspay.com/')
-    })
+  it('search field for email OfficeUser', function () {
+    this.retries(1)
+    LoginPage.login()
+    DashboardPage.leftMenu.waitForText()
+    DashboardPage.officesUsersMenu.click()
+    browser.pause(1000)
+    DashboardPage.officeUsersMenu.click()
+    browser.refresh()
+    OfficeUsersPage.searchOfficeUsers.waitForVisible()
+    OfficeUsersPage.searchOfficeUsers.setValue('dnathans@gmail.com')
+    waitFilter(OfficeUsersPage.searchOfficeUsersItem.selector)
+    expect(OfficeUsersPage.searchOfficeUsersItem.getText()).to.equal('dnathans@gmail.com')
+  })
 
-    it('im an admin and i ghost into a office user account', function () {
-      this.retries(1)
-      LoginPage.login()
-      DashboardPage.leftMenu.waitForText()
-      DashboardPage.officesUsersMenu.click()
-      DashboardPage.officeUsersMenu.waitForVisible()
-      browser.pause(200)
-      DashboardPage.officeUsersMenu.click()
-      browser.refresh()
-      OfficeUsersPage.ghostButtonOfFirstOfficeUser.waitForVisible()
-      OfficeUsersPage.ghostButtonOfFirstOfficeUser.click()
-      browser.waitForVisible('span=Admin Panel')
-      expect(browser.getUrl()).to.be.equal('https://rc-admin.seamlesspay.com/')
-    })
+  // TODO: is not visible table Office Tree
+  it.skip('search field for email Office Tree', () => {
+    LoginPage.login()
+    DashboardPage.leftMenu.waitForText()
+    DashboardPage.officesUsersMenu.click()
+    browser.pause(1000)
+    DashboardPage.officeTree.click()
+    browser.refresh()
+    OfficeTreePage.searchOfficeTree.waitForVisible()
+    OfficeTreePage.searchOfficeTree.setValue('sdsa@aol.com')
+    waitFilter(OfficeUsersPage.searchOfficeTreeItem.selector)
+    expect(OfficeUsersPage.searchOfficeTreeItem.getText()).to.equal('sdsa@aol.com')
+  })
 
-    it('verify TCC ans SVS configurations', () => {
-      LoginPage.login()
-      // TCC configurations
-      page.open('merchants/32469466')
-      browser.pause(3000)
-      MerchantDetailsPage.featuresTab.waitForEnabled()
-      MerchantDetailsPage.featuresTab.click()
-      MerchantDetailsPage.header.waitForVisible()
-      const tccConfig = browser.getText(MerchantDetailsPage.tccConfigurations.selector)
-      expect(tccConfig.length).to.be.equal(7)
-      // console.log(tccConfig);
-      tccConfig.forEach((val) => {
-        expect(val).to.not.equal('')
-      })
+  it('search field business name for Merchants', function () {
+    this.retries(1)
+    LoginPage.login()
+    DashboardPage.leftMenu.waitForText()
+    DashboardPage.merchantsUsersMenu.click()
+    browser.pause(1000)
+    DashboardPage.merchantsMenu.click()
+    browser.refresh()
+    MerchantsPage.searchMerchants.waitForVisible()
+    MerchantsPage.searchMerchants.setValue('BARZINHO')
+    waitFilter(MerchantsPage.searchMerchantItem.selector)
+    expect(MerchantsPage.searchMerchantItem.getText()).to.equal('BARZINHO')
+  })
 
-      // SVS configurations
-      page.open('merchants/470752536903370')
-      browser.pause(3000)
-      MerchantDetailsPage.featuresTab.waitForEnabled()
-      MerchantDetailsPage.featuresTab.click()
-      MerchantDetailsPage.header.waitForVisible()
-      const svsConfig = browser.getText(MerchantDetailsPage.svsConfigurations.selector).slice(0, 8)
-      svsConfig.forEach((val) => {
-        expect(val).to.not.equal('')
-      })
-    })
+  it('search field email for Merchant User', function () {
+    this.retries(1)
+    LoginPage.login()
+    DashboardPage.leftMenu.waitForText()
+    DashboardPage.merchantsUsersMenu.click()
+    browser.pause(1000)
+    DashboardPage.merchantUsersMenuList.click()
+    browser.refresh()
+    MerchantUsersPage.searchMerchantUsers.waitForVisible()
+    MerchantUsersPage.searchMerchantUsers.setValue('lavillettanyc@gmail.com')
+    waitFilter(MerchantUsersPage.searchMerchantsUserItem.selector)
+    const searchResMerchantUser = browser.getText(MerchantUsersPage.searchMerchantsUserItem.selector)
+    expect(searchResMerchantUser).to.deep.include('lavillettanyc@gmail.com')
+  })
 
-    it('search field for dashboard merchants', function () {
-      this.retries(1)
-      LoginPage.login()
-      DashboardPage.searchField.waitForVisible()
-      DashboardPage.dashboardContent.waitForVisible()
-      DashboardPage.searchField.setValue('470752536903867')
-      page.open('search/470752536903867')
-      MerchantsPage.contentMerchants.waitForVisible()
-      const searchResultMerchant = browser.getText(MerchantsPage.searchContentListMerchants.selector)
-      expect(searchResultMerchant).to.deep.include('470752536903867')
-    })
+  it('search field data id for Retrievals', function () {
+    this.retries(1)
+    LoginPage.login()
+    DashboardPage.leftMenu.waitForText()
+    DashboardPage.risk.click()
+    browser.pause(1000)
+    DashboardPage.riskRetrievals.click()
+    browser.refresh()
+    RiskRetrievalsPage.searchRiskRetrievals.waitForVisible()
+    selectFilterDate()
+    RiskRetrievalsPage.searchRiskRetrievals.setValue('470752136909199')
+    waitFilter(RiskRetrievalsPage.searchRiskRetrievalsItem.selector)
+    expect(RiskRetrievalsPage.searchRiskRetrievalsItem.getText()).to.equal('470752136909199')
+  })
 
-    it('search field for Email Merchant Users', function () {
-      this.retries(1)
-      LoginPage.login()
-      DashboardPage.searchField.waitForVisible()
-      DashboardPage.dashboardContent.waitForVisible()
-      DashboardPage.searchField.setValue('alexa-user@ew.com')
-      page.open('search/alexa-user@ew.com')
-      MerchantUsersPage.contentMerchantUser.waitForVisible()
-      const searchResultEmail = browser.getText(MerchantUsersPage.searchListEmailMerchantUser.selector)
-      expect(searchResultEmail).to.deep.include('alexa-user@ew.com')
-    })
+  it('search field data id for Disputes', function () {
+    this.retries(1)
+    LoginPage.login()
+    DashboardPage.leftMenu.waitForText()
+    DashboardPage.risk.click()
+    browser.pause(1000)
+    DashboardPage.riskDisputes.click()
+    browser.refresh()
+    RiskDisputesPage.searchRiskDisputes.waitForVisible()
+    selectFilterDate()
+    RiskDisputesPage.searchRiskDisputes.setValue('498894125400440')
+    waitFilter(RiskDisputesPage.searchRiskDisputesItem.selector)
+    expect(RiskDisputesPage.searchRiskDisputesItem.getText()).to.equal('498894125400440')
+  })
 
-    it('search field for email Offices', () => {
-      LoginPage.login()
-      DashboardPage.leftMenu.waitForText()
-      DashboardPage.officesUsersMenu.click()
-      browser.pause(1000)
-      DashboardPage.officesMenu.click()
-      browser.refresh()
-      OfficesPage.searchOffices.waitForVisible()
-      OfficesPage.searchOffices.setValue('Seamless')
-      waitFilter(OfficesPage.searchName.selector)
-      expect(OfficesPage.searchName.getText()).to.equal('Seamless')
-    })
+  it('search field ticketId for Tickets Agents', function () {
+    this.retries(1)
+    LoginPage.login()
+    DashboardPage.leftMenu.waitForText()
+    DashboardPage.ticketsMenu.click()
+    browser.pause(1000)
+    DashboardPage.ticketsAgents.click()
+    browser.refresh()
+    TicketsAgentsPage.searchTicketsAgents.waitForVisible()
+    TicketsAgentsPage.searchTicketsAgents.setValue('1001')
+    waitFilter(TicketsAgentsPage.searchTicketsAgentsItem.selector)
+    expect(TicketsAgentsPage.searchTicketsAgentsItem.getText()).to.equal('1001')
+  })
 
-    it('search field for email OfficeUser', function () {
-      this.retries(1)
-      LoginPage.login()
-      DashboardPage.leftMenu.waitForText()
-      DashboardPage.officesUsersMenu.click()
-      browser.pause(1000)
-      DashboardPage.officeUsersMenu.click()
-      browser.refresh()
-      OfficeUsersPage.searchOfficeUsers.waitForVisible()
-      OfficeUsersPage.searchOfficeUsers.setValue('dnathans@gmail.com')
-      waitFilter(OfficeUsersPage.searchOfficeUsersItem.selector)
-      expect(OfficeUsersPage.searchOfficeUsersItem.getText()).to.equal('dnathans@gmail.com')
-    })
-
-      //TODO: is not visible table Office Tree
-    it.skip('search field for email Office Tree', () => {
-      LoginPage.login()
-      DashboardPage.leftMenu.waitForText()
-      DashboardPage.officesUsersMenu.click()
-      browser.pause(1000)
-      DashboardPage.officeTree.click()
-      browser.refresh()
-      OfficeTreePage.searchOfficeTree.waitForVisible()
-      OfficeTreePage.searchOfficeTree.setValue('sdsa@aol.com')
-      waitFilter(OfficeUsersPage.searchOfficeTreeItem.selector)
-      expect(OfficeUsersPage.searchOfficeTreeItem.getText()).to.equal('sdsa@aol.com')
-    })
-
-    it('search field business name for Merchants', function () {
-      this.retries(1)
-      LoginPage.login()
-      DashboardPage.leftMenu.waitForText()
-      DashboardPage.merchantsUsersMenu.click()
-      browser.pause(1000)
-      DashboardPage.merchantsMenu.click()
-      browser.refresh()
-      MerchantsPage.searchMerchants.waitForVisible()
-      MerchantsPage.searchMerchants.setValue('BARZINHO')
-      waitFilter(MerchantsPage.searchMerchantItem.selector)
-      expect(MerchantsPage.searchMerchantItem.getText()).to.equal('BARZINHO')
-    })
-
-    it('search field email for Merchant User', function () {
-      this.retries(1)
-      LoginPage.login()
-      DashboardPage.leftMenu.waitForText()
-      DashboardPage.merchantsUsersMenu.click()
-      browser.pause(1000)
-      DashboardPage.merchantUsersMenuList.click()
-      browser.refresh()
-      MerchantUsersPage.searchMerchantUsers.waitForVisible()
-      MerchantUsersPage.searchMerchantUsers.setValue('lavillettanyc@gmail.com')
-      waitFilter(MerchantUsersPage.searchMerchantsUserItem.selector)
-      const searchResMerchantUser = browser.getText(MerchantUsersPage.searchMerchantsUserItem.selector)
-      expect(searchResMerchantUser).to.deep.include('lavillettanyc@gmail.com')
-    })
-
-    it('search field data id for Retrievals', function () {
-      this.retries(1)
-      LoginPage.login()
-      DashboardPage.leftMenu.waitForText()
-      DashboardPage.risk.click()
-      browser.pause(1000)
-      DashboardPage.riskRetrievals.click()
-      browser.refresh()
-      RiskRetrievalsPage.searchRiskRetrievals.waitForVisible()
-      selectFilterDate()
-      RiskRetrievalsPage.searchRiskRetrievals.setValue('470752136909199')
-      waitFilter(RiskRetrievalsPage.searchRiskRetrievalsItem.selector)
-      expect(RiskRetrievalsPage.searchRiskRetrievalsItem.getText()).to.equal('470752136909199')
-    })
-
-    it('search field data id for Disputes', function () {
-      this.retries(1)
-      LoginPage.login()
-      DashboardPage.leftMenu.waitForText()
-      DashboardPage.risk.click()
-      browser.pause(1000)
-      DashboardPage.riskDisputes.click()
-      browser.refresh()
-      RiskDisputesPage.searchRiskDisputes.waitForVisible()
-      selectFilterDate()
-      RiskDisputesPage.searchRiskDisputes.setValue('498894125400440')
-      waitFilter(RiskDisputesPage.searchRiskDisputesItem.selector)
-      expect(RiskDisputesPage.searchRiskDisputesItem.getText()).to.equal('498894125400440')
-    })
-
-    it('search field ticketId for Tickets Agents', function () {
-      this.retries(1)
-      LoginPage.login()
-      DashboardPage.leftMenu.waitForText()
-      DashboardPage.ticketsMenu.click()
-      browser.pause(1000)
-      DashboardPage.ticketsAgents.click()
-      browser.refresh()
-      TicketsAgentsPage.searchTicketsAgents.waitForVisible()
-      TicketsAgentsPage.searchTicketsAgents.setValue('1001')
-      waitFilter(TicketsAgentsPage.searchTicketsAgentsItem.selector)
-      expect(TicketsAgentsPage.searchTicketsAgentsItem.getText()).to.equal('1001')
-    })
-
-    it('search field merchant name for Tickets Merchants', () => {
-      LoginPage.login()
-      DashboardPage.leftMenu.waitForText()
-      DashboardPage.ticketsMenu.click()
-      browser.pause(1000)
-      DashboardPage.ticketsMerchants.click()
-      browser.refresh()
-      TicketsMerchantsPage.searchTicketsMerchants.waitForVisible()
-      TicketsMerchantsPage.searchTicketsMerchants.setValue('THE BAIL BOYS BAIL BONDS LA')
-      waitFilter(TicketsMerchantsPage.searchTicketsMerchantsItem.selector)
-      expect(TicketsMerchantsPage.searchTicketsMerchantsItem.getText()).to.equal('THE BAIL BOYS BAIL BONDS LA')
-    })
+  it('search field merchant name for Tickets Merchants', () => {
+    LoginPage.login()
+    DashboardPage.leftMenu.waitForText()
+    DashboardPage.ticketsMenu.click()
+    browser.pause(1000)
+    DashboardPage.ticketsMerchants.click()
+    browser.refresh()
+    TicketsMerchantsPage.searchTicketsMerchants.waitForVisible()
+    TicketsMerchantsPage.searchTicketsMerchants.setValue('THE BAIL BOYS BAIL BONDS LA')
+    waitFilter(TicketsMerchantsPage.searchTicketsMerchantsItem.selector)
+    expect(TicketsMerchantsPage.searchTicketsMerchantsItem.getText()).to.equal('THE BAIL BOYS BAIL BONDS LA')
+  })
 
   describe('test should', function () {
     it.skip('create/delete new Office User', () => {
@@ -292,11 +291,11 @@ const page = new Page()
       waitFilter(OfficeUsersPage.searchOfficeUsersItem.selector)
       expect(OfficeUsersPage.searchOfficeUsersItem.getText()).to.equal('tester@gmail.com')
       OfficeUsersPage.removeOfficeUser()
-        // TODO: add after fix bug
-        // OfficeUsersPage.searchOfficeUsers.waitForVisible()
-        // OfficeUsersPage.searchOfficeUsers.setValue('tester@gmail.com')
-        // waitFilter(OfficeUsersPage.searchOfficeUsersItem.selector)
-        // expect(OfficeUsersPage.searchOfficeUsersItem.getText()).to.equal('')
+      // TODO: add after fix bug
+      // OfficeUsersPage.searchOfficeUsers.waitForVisible()
+      // OfficeUsersPage.searchOfficeUsers.setValue('tester@gmail.com')
+      // waitFilter(OfficeUsersPage.searchOfficeUsersItem.selector)
+      // expect(OfficeUsersPage.searchOfficeUsersItem.getText()).to.equal('')
     })
 
     it.skip('create/delete new Merchant User', () => {
@@ -314,13 +313,13 @@ const page = new Page()
       waitFilter(MerchantUsersPage.searchMerchantsUserItem.selector)
       expect(MerchantUsersPage.searchMerchantsUserItem.getText()).to.equal('userTestMerch@i.gmail.com')
       MerchantUsersPage.removeUser()
-        // TODO: add after fix bug
-        // MerchantUsersPage.searchMerchantUsers.waitForVisible()
-        // MerchantUsersPage.searchMerchantUsers.setValue('userTestMerch@i.gmail.com')
-        // waitFilter(MerchantUsersPage.searchMerchantsUserItem.selector)
-        // expect(OfficeUsersPage.searchMerchantsUserItem.getText()).to.equal('')
+      // TODO: add after fix bug
+      // MerchantUsersPage.searchMerchantUsers.waitForVisible()
+      // MerchantUsersPage.searchMerchantUsers.setValue('userTestMerch@i.gmail.com')
+      // waitFilter(MerchantUsersPage.searchMerchantsUserItem.selector)
+      // expect(OfficeUsersPage.searchMerchantsUserItem.getText()).to.equal('')
     })
-        // TODO: task for create user
+    // TODO: task for create user
     it.skip('create new Merchant', () => {
       this.retries(1)
       LoginPage.login()
@@ -336,7 +335,6 @@ const page = new Page()
       MerchantsPage.searchMerchants.setValue('')
       waitFilter(MerchantsPage.searchMerchantItem.selector)
       expect(MerchantsPage.searchMerchantItem.getText()).to.equal('')
-
     })
 
     it('assign Merchants', function () {
@@ -396,7 +394,7 @@ const page = new Page()
       OfficesPage.modalConfirm.waitForVisible()
       OfficesPage.modalYes.click()
       // waitForHidden()
-      //TODO: add validation check after fix bug
+      // TODO: add validation check after fix bug
       // OfficesPage.searchOffices.setValue('Test Office')
       // waitFilter(OfficesPage.searchOfficesItem.selector)
       // expect(OfficesPage.searchOfficesItem.getText()).to.equal('')
@@ -414,7 +412,7 @@ const page = new Page()
       SettingsTicketsPage.addSubjectPortal()
       waitForHidden()
       let arr = browser.getText(SettingsTicketsPage.arraySubject.selector)
-      expect(arr).to.deep.include(browser.getValue( SettingsTicketsPage.modalFieldSubject.selector))
+      expect(arr).to.deep.include(browser.getValue(SettingsTicketsPage.modalFieldSubject.selector))
     })
 
     it.skip('add Subject Admin for Settings Tickets', () => {
@@ -429,7 +427,7 @@ const page = new Page()
       SettingsTicketsPage.addSubjectAdmin()
       waitForHidden()
       let arr = browser.getText(SettingsTicketsPage.arraySubject.selector)
-      expect(arr).to.deep.include(browser.getValue( SettingsTicketsPage.modalFieldSubject.selector))
+      expect(arr).to.deep.include(browser.getValue(SettingsTicketsPage.modalFieldSubject.selector))
     })
 
     it.skip('create/delete new Ticket for Tickets Merchant', function () {
@@ -472,13 +470,12 @@ const page = new Page()
       DepartmentsPage.modalConfig.waitForVisible()
       DepartmentsPage.buttonYes.click()
       browser.pause(1500)
-        //TODO: add after fix bug
+      // TODO: add after fix bug
       // DepartmentsPage.searchDepartments.setValue('Others sales New')
       // waitFilter(DepartmentsPage.searchDepartmentsItem.selector)
       // expect(DepartmentsPage.searchDepartmentsItem.getText()).to.equal('')
-
     })
-      //TODO: fix bug ticket -> edit -> departments (not cleaned)
+    // TODO: fix bug ticket -> edit -> departments (not cleaned)
     it.skip('add/remove binding Tickets with Departments', function () {
       this.retries(1)
       LoginPage.login()
@@ -511,13 +508,11 @@ const page = new Page()
       DashboardPage.departments.click()
       DepartmentsPage.searchItem()
       DepartmentsPage.removeDepartment()
-      //TODO: add after fix bug
+      // TODO: add after fix bug
       // DepartmentsPage.searchDepartments.setValue('Others sales New1')
       // waitFilter(DepartmentsPage.searchDepartmentsItem.selector)
       // expect(DepartmentsPage.searchDepartmentsItem.getText()).to.equal('')
-
     })
-
 
     it('search in field Search tables and pagination blocks', () => {
       LoginPage.login()
@@ -530,7 +525,7 @@ const page = new Page()
       SearchPage.isVisibility()
     })
 
-      //TODO: fix bug - 4 menu item ListBug_SeamlessPay files
+    // TODO: fix bug - 4 menu item ListBug_SeamlessPay files
     it.skip('check ghost admin for office User table', function () {
       this.retries(1)
       LoginPage.login()
@@ -567,9 +562,9 @@ const page = new Page()
       SearchPage.clickLinkMerchantManagement.click()
       browser.pause(1300)
       const array = browser.getText(SearchPage.linkPaginationManagement.selector)
-      expect(array).to.include('11');
+      expect(array).to.include('11')
     })
-      //TODO: fix bug - 4 menu item ListBug_SeamlessPay files
+    // TODO: fix bug - 4 menu item ListBug_SeamlessPay files
     it.skip('check work pagination/buttons block for merchant user table', function () {
       this.retries(1)
       LoginPage.login()
@@ -590,7 +585,7 @@ const page = new Page()
       // const res = browser.getText(SearchPage.resField.selector)
       // expect(res).to.deepInclude('New')
     })
-      //TODO: fix bug - 4 menu item ListBug_SeamlessPay files
+    // TODO: fix bug - 4 menu item ListBug_SeamlessPay files
     it.skip('check work pagination/buttons block for office user', () => {
       this.retries(1)
       LoginPage.login()
@@ -603,7 +598,7 @@ const page = new Page()
       SearchPage.checkBlocks()
       SearchPage.ghostChangeOfficeUser.click()
       SearchPage.modalWindowContent.waitForVisible()
-        //TODO: ADD CHECK update fields
+      // TODO: ADD CHECK update fields
       // const lastNameUser = browser.getValue(SearchPage.modalLastNameInputOfficeUser.selector)
       // expect(lastNameUser).to.equal('Office1')
     })
@@ -622,15 +617,14 @@ const page = new Page()
       waitFilter(OfficeUsersPage.searchOfficeUsersItem.selector)
       expect(OfficeUsersPage.searchOfficeUsersItem.getText()).to.equal('test11@test.com')
       if (!OfficeUsersPage.statusLockOffice) {
-          OfficeUsersPage.lockedItemOfficeUsersPage.click()
-          LoginPage.logOut()
-          waitForHidden()
-          LoginPage.loginOfficeUser()
-          expect(LoginPage.errorMessage.waitForVisible()).to.equal(true)
+        OfficeUsersPage.lockedItemOfficeUsersPage.click()
+        LoginPage.logOut()
+        waitForHidden()
+        LoginPage.loginOfficeUser()
+        expect(LoginPage.errorMessage.waitForVisible()).to.equal(true)
       } else {
-          this.skip();
+        this.skip()
       }
-
     })
 
     it('unlocked office user', function () {
@@ -686,14 +680,14 @@ const page = new Page()
       waitFilter(MerchantUsersPage.searchMerchantsUserItem.selector)
       expect(MerchantUsersPage.searchMerchantsUserItem.getText()).to.equal('test23@test.com')
       if (!MerchantUsersPage.statusLockMerchant) {
-          MerchantUsersPage.lockedItemMerchantUsers.click()
-          LoginPage.logOut()
-          waitForHidden()
-          browser.url('https://rc-portal.seamlesspay.com/login')
-          LoginPagePortal.loginMerchant()
-          expect(LoginPagePortal.errorMessage.waitForVisible()).to.equal(true)
+        MerchantUsersPage.lockedItemMerchantUsers.click()
+        LoginPage.logOut()
+        waitForHidden()
+        browser.url('https://rc-portal.seamlesspay.com/login')
+        LoginPagePortal.loginMerchant()
+        expect(LoginPagePortal.errorMessage.waitForVisible()).to.equal(true)
       } else {
-          this.skip();
+        this.skip()
       }
     })
 
@@ -731,15 +725,15 @@ const page = new Page()
       DashboardPage.ticketsAgents.click()
       browser.refresh()
       TicketsAgentsPage.btnCreate.waitForVisible()
-      let counts = browser.getText(TicketsMerchantsPage.countMerchants.selector).slice(7,-5)
+      let counts = browser.getText(TicketsMerchantsPage.countMerchants.selector).slice(7, -5)
       TicketsAgentsPage.btnCreate.click()
       CreateAgentsTicketPage.createAgents()
       TicketsAgentsPage.btnCreate.waitForVisible()
       scrollToElement(TicketsAgentsPage.countAgents)
       browser.refresh()
       TicketsAgentsPage.btnCreate.waitForVisible()
-      let countsRes = browser.getText(TicketsAgentsPage.countAgents.selector).slice(7,-5)
-      assert.isAbove(+countsRes, +counts)
+      let countsRes = browser.getText(TicketsAgentsPage.countAgents.selector).slice(7, -5)
+      assert.isAbove(Number(countsRes), Number(counts))
     })
 
     it('create ticket merchants', function () {
@@ -751,17 +745,15 @@ const page = new Page()
       DashboardPage.ticketsMerchants.click()
       browser.refresh()
       TicketsMerchantsPage.btnCreate.waitForVisible()
-      let counts = browser.getText(TicketsMerchantsPage.countMerchants.selector).slice(7,-5)
+      let counts = browser.getText(TicketsMerchantsPage.countMerchants.selector).slice(7, -5)
       TicketsMerchantsPage.btnCreate.click()
       CreateTicketPage.createTickets()
       TicketsMerchantsPage.btnCreate.waitForVisible()
       scrollToElement(TicketsMerchantsPage.countMerchants)
       browser.refresh()
       TicketsMerchantsPage.btnCreate.waitForVisible()
-      let countsRes = browser.getText(TicketsMerchantsPage.countMerchants.selector).slice(7,-5)
-      assert.isAbove(+countsRes, +counts)
+      let countsRes = browser.getText(TicketsMerchantsPage.countMerchants.selector).slice(7, -5)
+      assert.isAbove(Number(countsRes), Number(counts))
     })
   })
 })
-
-
