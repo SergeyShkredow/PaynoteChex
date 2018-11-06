@@ -1,9 +1,9 @@
 import Page from './page'
 
 class DashboardPage extends Page {
-    open () {
-        super.open('/transactions')
-    }
+  open () {
+    super.open('/transactions')
+  }
 }
 
 export default new DashboardPage()

@@ -42,6 +42,9 @@ exports.config = {
   suites: {
     admin: [
       './test/specs/paynote-admin.spec.js'
+    ],
+    logIn: [
+      './test/specs/login.spec.js'
     ]
   },
   // Patterns to exclude.
@@ -64,8 +67,8 @@ exports.config = {
   //
   capabilities: [
     {
-      // browserName: 'chrome',
-      browserName: 'firefox',
+      browserName: 'chrome',
+      // browserName: 'firefox',
       maxInstances: '10'
     }
     //     ,
@@ -138,7 +141,6 @@ exports.config = {
   // Cucumber: `$ npm install cucumber`
   framework: 'mocha',
   baseUrl: 'https://dev-paynote.seamlesschex.com/',
-  // baseUrl: 'https://exist.ua/',
   //
   // Test reporter for stdout.
   // The following are supported: dot (default), spec and xunit

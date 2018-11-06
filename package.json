@@ -9,6 +9,7 @@
     "selenium": "node_modules/.bin/selenium-standalone start",
     "test": "wdio wdio.conf.js",
     "admin": "yarn run test -- --suite admin",
+    "logIn": "yarn run test -- --suite logIn",
     "lint": "eslint test/**/*.js",
     "lint-staged": "lint-staged",
     "lint:fix": "eslint --fix test/. "

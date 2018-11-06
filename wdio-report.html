@@ -122,16 +122,16 @@
         </thead>
 
         <tbody>
-          <tr><td>Start</td><td>Tue Oct 30 2018 19:24:12 GMT+0200 (EET)</td></tr>
-          <tr><td>End</td><td>Tue Oct 30 2018 19:24:39 GMT+0200 (EET)</td></tr>
-          <tr><td>Duration</td><td>00:00:26.04</td></tr>
+          <tr><td>Start</td><td>Tue Nov 06 2018 14:44:13 GMT+0200 (EET)</td></tr>
+          <tr><td>End</td><td>Tue Nov 06 2018 14:44:57 GMT+0200 (EET)</td></tr>
+          <tr><td>Duration</td><td>00:00:44.11</td></tr>
           <tr><td>Breakdown</td><td>
             <table class="table table-bordered">
               <tr>
                 <td class='test-pass'>Passes</td><td class='test-pending'>Pending</td><td class='test-fail'>Failures</td>
               </tr>
               <tr>
-                <td>1</td><td>0</td><td>0</td>
+                <td>0</td><td>0</td><td>2</td>
               </tr>
             </table>
           </td></tr>
@@ -164,24 +164,24 @@
                     <h3>0-0:</h3>
                      <table class="table table-bordered">
 <!--
-                      <tr><td>Spec Start</td><td>Tue Oct 30 2018 19:24:14 GMT+0200 (EET)</td></tr>
-                      <tr><td>Spec End</td><td>Tue Oct 30 2018 19:24:38 GMT+0200 (EET)</td></tr>
-                      <tr><td>Spec Duration</td><td>00:00:24.17</td></tr>
+                      <tr><td>Spec Start</td><td>Tue Nov 06 2018 14:44:16 GMT+0200 (EET)</td></tr>
+                      <tr><td>Spec End</td><td>Tue Nov 06 2018 14:44:57 GMT+0200 (EET)</td></tr>
+                      <tr><td>Spec Duration</td><td>00:00:41.31</td></tr>
  -->
-                      <tr><td>Spec Files</td><td>/home/tarf/Рабочий стол/SERGEY/DATASUB/PaynoteChex/test/specs/paynote-admin.spec.js</td></tr>
+                      <tr><td>Spec Files</td><td>/home/tarf/Рабочий стол/SERGEY/DATASUB/PaynoteChex/test/specs/login.spec.js</td></tr>
 
                             <table class="table table-bordered table-suite">
                               <tr class="suite-header">
-                                <td colspan="2" class="suite-pass">
+                                <td colspan="2" class="suite-fail">
                                   <h3>
-                                    <span style="margin: 2px; padding: 1px">&nbsp;</span>Admin
+                                    <span style="margin: 2px; padding: 1px">&nbsp;</span>Login with
                                   </h3>
                                 </td>
                               </tr>
 
-                                <tr><td>Suite Start</td><td>Tue Oct 30 2018 19:24:24 GMT+0200 (EET)</td></tr>
-                                <tr><td>Suite End</td><td>Tue Oct 30 2018 19:24:36 GMT+0200 (EET)</td></tr>
-                                <tr><td>Suite Duration</td><td>00:00:12.35</td></tr>
+                                <tr><td>Suite Start</td><td>Tue Nov 06 2018 14:44:30 GMT+0200 (EET)</td></tr>
+                                <tr><td>Suite End</td><td>Tue Nov 06 2018 14:44:57 GMT+0200 (EET)</td></tr>
+                                <tr><td>Suite Duration</td><td>00:00:27.52</td></tr>
 
 
                                 <tr><td colspan="2"><h4>Tests:</h4></td></tr>
@@ -190,9 +190,41 @@
                                     <table>
                                         <tr><td>
                                           <table class="table table-test">
-                                            <tr><td colspan="2" class="test-pass">success email with invalid Password</td></tr>
-                                            <!-- <tr><td>Test Start</td><td>Tue Oct 30 2018 19:24:24 GMT+0200 (EET)</td></tr> -->
+                                            <tr><td colspan="2" class="test-fail">Create new Document Merchant</td></tr>
+                                            <!-- <tr><td>Test Start</td><td>Tue Nov 06 2018 14:44:30 GMT+0200 (EET)</td></tr> -->
 
+                                              <tr class="test-row"><td colspan="2"><pre>Promise was rejected with the following reason: A session id is required for this command but wasn&#x27;t found in the response payload</pre></td></tr>
+                                              <tr class="test-row"><td colspan="2"><pre>Error: Promise was rejected with the following reason: A session id is required for this command but wasn&#x27;t found in the response payload
+    at new WaitUntilTimeoutError (node_modules/webdriverio/build/lib/utils/ErrorHandler.js:150:12)
+    at node_modules/webdriverio/build/lib/commands/waitUntil.js:36:15
+    at &lt;anonymous&gt;
+    at process._tickDomainCallback (internal/process/next_tick.js:229:7)</pre></td></tr>
+                                              <tr class="test-row"><td colspan="2"><pre>WaitUntilTimeoutError</pre></td></tr>
+
+
+                                            <tr class="test-row">
+                                            </tr>
+
+                                          </table>
+                                        </td><tr>
+                                        <tr><td>
+                                          <table class="table table-test">
+                                            <tr><td colspan="2" class="test-fail">&quot;after each&quot; hook for &quot;Create new Document Merchant&quot;</td></tr>
+                                            <!-- <tr><td>Test Start</td><td>Tue Nov 06 2018 14:44:57 GMT+0200 (EET)</td></tr> -->
+
+                                              <tr class="test-row"><td colspan="2"><pre>A session id is required for this command but wasn&#x27;t found in the response payload</pre></td></tr>
+                                              <tr class="test-row"><td colspan="2"><pre>Error: A session id is required for this command but wasn&#x27;t found in the response payload
+    at new RuntimeError (node_modules/webdriverio/build/lib/utils/ErrorHandler.js:144:12)
+    at RequestHandler.createOptions (node_modules/webdriverio/build/lib/utils/RequestHandler.js:121:23)
+    at RequestHandler.create (node_modules/webdriverio/build/lib/utils/RequestHandler.js:212:43)
+    at Object.localStorage (node_modules/webdriverio/build/lib/protocol/localStorage.js:67:32)
+    at Object.exec (node_modules/webdriverio/build/lib/helpers/safeExecute.js:28:24)
+    at Object.resolve (node_modules/webdriverio/build/lib/webdriverio.js:191:29)
+    at lastPromise.then.resolve.call.depth (node_modules/webdriverio/build/lib/webdriverio.js:486:32)
+    at _fulfilled (node_modules/q/q.js:854:54)
+    at self.promiseDispatch.done (node_modules/q/q.js:883:30)
+    at Promise.promise.promiseDispatch (node_modules/q/q.js:816:13)</pre></td></tr>
+                                              <tr class="test-row"><td colspan="2"><pre>NoSessionIdError</pre></td></tr>
 
 
                                             <tr class="test-row">

@@ -1,30 +1,38 @@
 import Page from './page'
+import { USER_PHONE, USER_EMAIL_PASSWORD, USER_TEST_EMAIL, USER_RETRY, USER_DOCUMENT } from '../../../constants/index'
 import DashboardPage from './dashboard.page'
-import { USER_EMAIL_PASSWORD, USER_PHONE } from '../../../constants/index'
 
-class SignUp extends Page {
-    get header () { return browser.element('.auth-header') }
-    get email () { return browser.element('#email') }
-    get password () { return browser.element('#password') }
-    get loginBtn () { return browser.element('button=Login') }
-    get signUpBtn () { return browser.element('button=Sign Up') }
-    get errorMessage () { return browser.element('div[type=error] p') }
-    get formVerification () { return browser.element('span=Please enter Access Verification Code') }
+class SignUpPage extends Page {
+  get header () { return browser.element('.auth-header') }
+  get fullName () { return browser.element('input[name="name"]') }
+  get email () { return browser.element('input[name="email"]') }
+  get phone () { return browser.element('input[name="phone"]') }
+  get password () { return browser.element('input[name="password"]') }
+  get confirmPass () { return browser.element('input[name="cpassword"]') }
+  get chbox () { return browser.element('input[type="checkbox"]') }
 
-    get buttonSeamplessMerchants () { return browser.element('span=Seamless') }
-    get buttonLogOutMerchants () { return browser.element('button=Sign Out') }
-    get modalMerchants () { return browser.element('.ant-modal-content') }
-    get buttonModalLogOutYesMerchants () { return browser.element('button=Yes') }
+  get loginBtn () { return browser.element('button=Login') }
+  get signUpBtn () { return browser.element('button=Sign Up') }
+  get errorMessage () { return browser.element('div[type=error] p') }
+  get formVerification () { return browser.element('span=Please enter Access Verification Code') }
 
-    open () {
-        super.open('sign-up')
-        this.header.waitForText()
-    }
+  open () {
+    super.open('sign-up')
+    this.header.waitForText()
+  }
 
-    submit () {
-        this.signUpBtn.click()
-    }
-
+  signUp () {
+    this.signUpBtn.click()
+  }
+  create (USER_DOCUMENT) {
+    this.fullName.setValue(USER_DOCUMENT)
+    this.email.setValue(USER_TEST_EMAIL)
+    this.phone.setValue(USER_PHONE)
+    this.password.setValue(USER_EMAIL_PASSWORD)
+    this.confirmPass.setValue(USER_EMAIL_PASSWORD)
+    this.chbox.click()
+      browser.pause(5000)
+  }
 }
 
-export default new SignUp()
+export default new SignUpPage()
