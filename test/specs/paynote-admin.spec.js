@@ -2,7 +2,7 @@ import Page from '../pages/paynote-admin/page'
 import LoginPage from '../pages/paynote-admin/login.page'
 import DashboardPage from '../pages/paynote-admin/dashboard.page'
 import SignUpPage from '../pages/paynote-admin/signUp.page'
-import {USER_DOCUMENT} from '../../constants'
+import {USER_DOCUMENT, USER_RETRY, USER_SUSPENDED, USER_VERIFY} from '../../constants'
 
 const page = new Page()
 
@@ -17,6 +17,10 @@ describe('Admin', () => {
 
   it('success login', () => {
     LoginPage.login()
+    let code = browser.getText('.alert-info').slice(-5, -1)
+    LoginPage.codeAuth.setValue(code)
+    browser.pause(1000)
+    LoginPage.subminBtn()
     DashboardPage.leftMenu.waitForText()
   })
 
@@ -25,9 +29,9 @@ describe('Admin', () => {
     LoginPage.email.waitForVisible()
     LoginPage.signUpBtn.click()
     SignUpPage.header.waitForVisible()
-    SignUpPage.create()
+    SignUpPage.create(USER_RETRY)
   })
-  it.only('Create new Document Merchant', () => {
+  it('Create new Document Merchant', () => {
     LoginPage.open()
     LoginPage.email.waitForVisible()
     LoginPage.signUpBtn.click()
@@ -39,24 +43,26 @@ describe('Admin', () => {
     LoginPage.email.waitForVisible()
     LoginPage.signUpBtn.click()
     SignUpPage.header.waitForVisible()
-    SignUpPage.create()
+    SignUpPage.create(USER_SUSPENDED)
   })
   it('Create new Verify Merchant', () => {
     LoginPage.open()
     LoginPage.email.waitForVisible()
     LoginPage.signUpBtn.click()
     SignUpPage.header.waitForVisible()
-    SignUpPage.create()
+    SignUpPage.create(USER_VERIFY)
   })
   describe('Menu', () => {
-    it('Admins', () => {
-      LoginPage.login()
-      DashboardPage.leftMenu.waitForText()
+    it.only('Admins', () => {
+      LoginPage.multiFactorAuth()
+      DashboardPage.leftMenu.waitForVisible()
+        browser.debug()
       DashboardPage.adminsMenu.click()
+        browser.pause(3000)
     })
-    it('Transactions', () => {
-      LoginPage.login()
-      DashboardPage.leftMenu.waitForText()
+    it.only('Transactions', () => {
+      LoginPage.multiFactorAuth()
+      DashboardPage.leftMenu.waitForVisible()
       DashboardPage.transactionsMenu.click()
     })
     it('Merchants', () => {

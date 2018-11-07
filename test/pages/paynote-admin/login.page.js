@@ -37,5 +37,12 @@ class LoginPage extends Page {
     this.loginBtn()
     this.formAuthentication.waitForVisible()
   }
+  multiFactorAuth () {
+    this.login()
+    let code = browser.getText('.alert-info').slice(-5, -1)
+    this.codeAuth.setValue(code)
+    browser.pause(1000)
+    this.subminBtn()
+  }
 }
 export default new LoginPage()

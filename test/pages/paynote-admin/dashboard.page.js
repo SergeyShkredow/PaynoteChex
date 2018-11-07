@@ -19,7 +19,7 @@ class DashboardPage extends Page {
   get emailLogMenu () { return browser.element('a[href="/email-log"]') }
 
   open () {
-    super.open('https://dev-paynote.seamlesschex.com/merchants')
+    super.open('/merchants')
     browser.pause(300)
   }
 }

@@ -24,14 +24,14 @@ class SignUpPage extends Page {
   signUp () {
     this.signUpBtn.click()
   }
-  create (USER_DOCUMENT) {
-    this.fullName.setValue(USER_DOCUMENT)
+  create (USER_EVENT) {
+    this.fullName.setValue(USER_EVENT)
     this.email.setValue(USER_TEST_EMAIL)
     this.phone.setValue(USER_PHONE)
     this.password.setValue(USER_EMAIL_PASSWORD)
     this.confirmPass.setValue(USER_EMAIL_PASSWORD)
     this.chbox.click()
-      browser.pause(5000)
+      browser.pause(2000)
   }
 }
 
